@@ -737,9 +737,9 @@ class FTTransformer(nn.Module):
         
         #重みを置くパラメータと重みを消すパラメータそれぞれが入った2種類の辞書を返す
         return [
-            {'param': [v for k, v in self.named_parameters() if needs_wd(k)]},
+            {'params': [v for k, v in self.named_parameters() if needs_wd(k)]},
             {
-                'param': [v for k, v in self.named_parameters() if not needs_wd(k)],
+                'params': [v for k, v in self.named_parameters() if not needs_wd(k)],
                 'weight_decay': 0.0,
             },
         ]
