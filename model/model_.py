@@ -248,7 +248,7 @@ class Transformer(nn.Module):
             x = self.linear_second(x)
             return x
     
-    class Head(nn.Module):
+    class Average(nn.Module):
         '''
         推論に用いる時に用いる(BERTみたいな感じ)
         '''
@@ -283,7 +283,7 @@ class Transformer(nn.Module):
             推論用の関数
             '''
             #加えた[CLS]の部分だけ抜き出す
-            x = x[:, -1]
+            x = torch.mean(x, dim = 1, keepdim = True)
             #正規化
             x = self.normalization(x)
             #活性化関数の通過
@@ -431,7 +431,7 @@ class Transformer(nn.Module):
             #できた層をself.blockに入れていく
             self.blocks.append(layer)
         #推論時に用いる関数の設定
-        self.head = Transformer.Head(
+        self.average = Transformer.Average(
             d_in = d_token,
             d_out = d_out,
             bias = True,
@@ -514,7 +514,7 @@ class Transformer(nn.Module):
             #恒等関数にいれる
             x = layer['output'](x)
         #推論に使用できる形にする
-        x = self.head(x)
+        x = self.average(x)
         return x
     
 class FTTransformer(nn.Module):
