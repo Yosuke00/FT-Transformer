@@ -1,4 +1,5 @@
 #推論用の関数パッケージ
+import time
 import numpy as np
 from sklearn.metrics import accuracy_score, log_loss, mean_squared_error
 from scipy.special import expit
@@ -146,5 +147,7 @@ class Train:
                 max_val_score = val_score
             elif max_val_score < val_score:
                 max_val_score = val_score
+                
+                time.sleep(3)
                 torch.save(model.state_dict(), f"./model.pth")
     
